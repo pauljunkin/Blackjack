@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        h2 {
+            color: aqua;
+        }
+        li {
+          display:inline;
+          padding-right: 10px;
+        }
+        #header {
+          display:inline;
+          padding-right: 10px;
+        }
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2> Blackjack</h2>
+    <input type="text" id="numberOfDecks" name="fname" placeholder="Number Of Decks">
+    <button id="StartGame">Start Game</button>
+    <article id="header">
+    </article>
+    <h3>Dealer</h3>
+    <article id="DealerCards">
+
+    </article>
+    <h3>Player</h3>
+    <article id="possibleScores">
+        <h4 id="score">Possible Scores</h4>
+    </article>
+    <button id="hit">HIT</button>
+    <button id="stand">STAND</button>
+    <button id="reset">RESET</button>
+    <article id="PlayerCards">
+
+    </article>
+    
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+<script>
+    var totalDeck = ["AceOfSpades" ,"AceOfHearts" ,"AceOfDiamonds" ,"AceOfClubs" ,"TwoOfSpades" ,"TwoOfHearts" ,"TwoOfDiamonds" ,"TwoOfClubs" ,"ThreeOfSpades" ,"ThreeOfHearts" ,"ThreeOfDiamonds" ,"ThreeOfClubs" ,"FourOfSpades" ,"FourOfHearts" ,"FourOfDiamonds" ,"FourOfClubs" ,"FiveOfSpades" ,"FiveOfHearts" ,"FiveOfDiamonds" ,"FiveOfClubs" ,"SixOfSpades" ,"SixOfHearts" ,"SixOfDiamonds" ,"SixOfClubs" ,"SevenOfSpades" ,"SevenOfHearts" ,"SevenOfDiamonds" ,"SevenOfClubs" ,"EightOfSpades" ,"EightOfHearts" ,"EightOfDiamonds" ,"EightOfClubs" ,"NineOfSpades" ,"NineOfHearts" ,"NineOfDiamonds" ,"NineOfClubs" ,"TenOfSpades" ,"TenOfHearts" ,"TenOfDiamonds" ,"TenOfClubs" ,"JackOfSpades" ,"JackOfHearts" ,"JackOfDiamonds" ,"JackOfClubs" ,"QueenOfSpades" , "QueenOfHearts" ,"QueenOfDiamonds" ,"QueenOfClubs" , "KingOfSpades" , "KingOfHearts" ,"KingOfDiamonds" ,"KingOfCLubs"]
+    var Deck = []
+    var CardValues = {
+    "AceOfSpades" : 11,
+    "AceOfHearts" : 11,
+    "AceOfDiamonds" : 11,
+    "AceOfClubs" : 11,
+    "TwoOfSpades" : 2,
+    "TwoOfHearts" : 2,
+    "TwoOfDiamonds" : 2,
+    "TwoOfClubs" : 2,
+    "ThreeOfSpades" : 3,
+    "ThreeOfHearts" : 3,
+    "ThreeOfDiamonds" : 3,
+    "ThreeOfClubs" : 3,
+    "FourOfSpades" : 4,
+    "FourOfHearts" : 4,
+    "FourOfDiamonds" : 4,
+    "FourOfClubs" : 4,
+    "FiveOfSpades" : 5,
+    "FiveOfHearts" : 5,
+    "FiveOfDiamonds" : 5,
+    "FiveOfClubs" : 5,
+    "SixOfSpades" : 6,
+    "SixOfHearts" : 6,
+    "SixOfDiamonds" : 6,
+    "SixOfClubs" : 6,
+    "SevenOfSpades" : 7,
+    "SevenOfHearts" : 7,
+    "SevenOfDiamonds" : 7,
+    "SevenOfClubs" : 7,
+    "EightOfSpades" : 8,
+    "EightOfHearts" : 8,
+    "EightOfDiamonds" : 8,
+    "EightOfClubs" : 8,
+    "NineOfSpades" : 9,
+    "NineOfHearts" : 9,
+    "NineOfDiamonds" : 9,
+    "NineOfClubs" : 9,
+    "TenOfSpades" : 10,
+    "TenOfHearts" : 10,
+    "TenOfDiamonds" : 10,
+    "TenOfClubs" : 10,
+    "JackOfSpades" : 10,
+    "JackOfHearts" : 10,
+    "JackOfDiamonds" : 10,
+    "JackOfClubs" : 10,
+    "QueenOfSpades" : 10,
+    "QueenOfHearts" : 10,
+    "QueenOfDiamonds" : 10,
+    "QueenOfClubs" : 10,
+    "KingOfSpades" : 10,
+    "KingOfHearts" : 10,
+    "KingOfDiamonds" : 10,
+    "KingOfCLubs": 10
+    }
+    var CardImages = {
+    "Back" : "Cards/Back.JPG",
+    "AceOfSpades" : "Cards/AceOfSpades.JPG",
+    "AceOfHearts" : "Cards/AceOfHearts.JPG",
+    "AceOfDiamonds" : "Cards/AceOfDiamonds.JPG",
+    "AceOfClubs" : "Cards/AceOfClubs.JPG",
+    "TwoOfSpades" : "Cards/TwoOfSpades.JPG",
+    "TwoOfHearts" : "Cards/TwoOfHearts.JPG",
+    "TwoOfDiamonds" : "Cards/TwoOfDiamonds.JPG",
+    "TwoOfClubs" : "Cards/TwoOfClubs.JPG",
+    "ThreeOfSpades" : "Cards/ThreeOfSpades.JPG",
+    "ThreeOfHearts" : "Cards/ThreeOfHearts.JPG",
+    "ThreeOfDiamonds" : "Cards/ThreeOfDiamonds.JPG",
+    "ThreeOfClubs" : "Cards/ThreeOfClubs.JPG",
+    "FourOfSpades" : "Cards/FourOfSpades.JPG",
+    "FourOfHearts" : "Cards/FourOfHearts.JPG",
+    "FourOfDiamonds" : "Cards/FourOfDiamonds.JPG",
+    "FourOfClubs" : "Cards/FourOfClubs.JPG",
+    "FiveOfSpades" : "Cards/FiveOfSpades.JPG",
+    "FiveOfHearts" : "Cards/FiveOfHearts.JPG",
+    "FiveOfDiamonds" : "Cards/FiveOfDiamonds.JPG",
+    "FiveOfClubs" : "Cards/FiveOfClubs.JPG",
+    "SixOfSpades" : "Cards/SixOfSpades.JPG",
+    "SixOfHearts" : "Cards/SixOfHearts.JPG",
+    "SixOfDiamonds" : "Cards/SixOfDiamonds.JPG",
+    "SixOfClubs" : "Cards/SixOfClubs.JPG",
+    "SevenOfSpades" : "Cards/SevenOfSpades.JPG",
+    "SevenOfHearts" : "Cards/SevenOfHearts.JPG",
+    "SevenOfDiamonds" : "Cards/SevenOfDiamonds.JPG",
+    "SevenOfClubs" : "Cards/SevenOfClubs.JPG",
+    "EightOfSpades" : "Cards/EightOfSpades.JPG",
+    "EightOfHearts" : "Cards/EightOfHearts.JPG",
+    "EightOfDiamonds" : "Cards/EightOfDiamonds.JPG",
+    "EightOfClubs" : "Cards/EightOfClubs.JPG",
+    "NineOfSpades" : "Cards/NineOfSpades.JPG",
+    "NineOfHearts" : "Cards/NineOfHearts.JPG",
+    "NineOfDiamonds" : "Cards/NineOfDiamonds.JPG",
+    "NineOfClubs" : "Cards/NineOfClubs.JPG",
+    "TenOfSpades" : "Cards/TenOfSpades.JPG",
+    "TenOfHearts" : "Cards/TenOfHearts.JPG",
+    "TenOfDiamonds" : "Cards/TenOfDiamonds.JPG",
+    "TenOfClubs" : "Cards/TenOfClubs.JPG",
+    "JackOfSpades" : "Cards/JackOfSpades.JPG",
+    "JackOfHearts" : "Cards/JackOfHearts.JPG",
+    "JackOfDiamonds" : "Cards/JackOfDiamonds.JPG",
+    "JackOfClubs" : "Cards/JackOfClubs.JPG",
+    "QueenOfSpades" : "Cards/QueenOfSpades.JPG",
+    "QueenOfHearts" : "Cards/QueenOfHearts.JPG",
+    "QueenOfDiamonds" : "Cards/QueenOfDiamonds.JPG",
+    "QueenOfClubs" : "Cards/QueenOfClubs.JPG",
+    "KingOfSpades" : "Cards/KingOfSpades.JPG",
+    "KingOfHearts" : "Cards/QueenOfHearts.JPG",
+    "KingOfDiamonds" : "Cards/KingOfDiamonds.JPG",
+    "KingOfCLubs": "Cards/KingOfClubs.JPG"
+    }
+    var PlayerCards = [];
+    var DealerCards = [];
+$("#reset").click(function(){
+    PlayerCards = [];
+    DealerCards = [];
+    DealerCards.push(Deck[0]);
+    Deck.shift();
+    PlayerCards.push(Deck[0])
+    Deck.shift();
+    DealerCards.push(Deck[0]);
+    Deck.shift();
+    PlayerCards.push(Deck[0])
+    Deck.shift();
+    $("#DealerCards").empty()
+    $("#PlayerCards").empty()
+    $("#DealerCards").append(`<a><img src = ${CardImages.Back} width = "75" height = "100"></a>`)
+    $("#DealerCards").append(`<a><img src = ${CardImages[DealerCards[0]]} width = "75" height = "100"></a>`)
+    $("#PlayerCards").append(`<a><img src = ${CardImages[PlayerCards[0]]} width = "75" height = "100"></a>`)
+    $("#PlayerCards").append(`<a><img src = ${CardImages[PlayerCards[1]]} width = "75" height = "100"></a>`)
+    button = document.getElementById("hit")
+    button1 = document.getElementById("stand")
+    button.disabled = false;
+    //walla thi sis a shidosd
+    button1.disabled = false;
+    $("#possibleScores").empty()
+})
+$("#StartGame").click(function(){
+    var deck1 = document.getElementById("numberOfDecks").value
+    for(let i = 0; i < deck1; i++){
+        for(let x = 0; x < totalDeck.length; x++){
+            Deck.push(totalDeck[x])
+        }
+    }
+    shuffleArray(Deck)
+    DealerCards.push(Deck[0]);
+    PlayerCards.push(Deck[0])
+    Deck.shift();
+    DealerCards.push(Deck[0]);
+    Deck.shift();
+    PlayerCards.push(Deck[0])
+    Deck.shift();
+    $("#DealerCards").append(`<a><img src = ${CardImages.Back} width = "75" height = "100"></a>`)
+    $("#DealerCards").append(`<a><img src = ${CardImages[DealerCards[0]]} width = "75" height = "100"></a>`)
+    $("#PlayerCards").append(`<a><img src = ${CardImages[PlayerCards[0]]} width = "75" height = "100"></a>`)
+    $("#PlayerCards").append(`<a><img src = ${CardImages[PlayerCards[1]]} width = "75" height = "100"></a>`)
+
+})
+$("#stand").click(function(){
+    var playerval
+    var dealerval
+
+    playerval = Math.max(...computeScore(PlayerCards))
+    dealerval = Math.max(...computeScore(DealerCards))
+    if(dealerval > playerval){
+        $("#header").append(`<h2>Dealer wins, with Score ${dealerval}</h2>`)
+    }
+    else{
+        while(17 > dealerval && dealerval != -1){
+            DealerCards.unshift(Deck[0])
+            Deck.shift();
+            dealerval = Math.max(...computeScore(DealerCards))
+            if(computeScore(DealerCards).length == 0){
+                dealerval = -1;
+            }
+        }
+        if(computeScore(DealerCards).length == 0){
+            $("#header").append(`<h2>You Win with score ${playerval}</h2>`)
+        }
+        else if(playerval == dealerval){
+            $("#header").append(`<h2>Push with Score ${playerval}</h2>`)
+        }
+        else if(playerval > dealerval){
+            $("#header").append(`<h2>You Win with score ${playerval}</h2>`)
+        }      
+        else{
+            $("#header").append(`<h2>Dealer wins, with Score ${dealerval}</h2>`)
+        }
+    }
+    $("#DealerCards").empty()
+    for(let i = 0; i < DealerCards.length; i++){
+        $("#DealerCards").append(`<a><img src = ${CardImages[DealerCards[i]]} width = "75" height = "100"></a>`)
+    }
+})
+function computeScore(x){
+    possibleVals = []
+    val1 = 0
+    val2 = 0
+    acecount = 0
+    sum = 0
+    for(let i = 0; i < x.length; i++){
+        if(CardValues[x[i]] == 11){
+            acecount++
+        }
+        else{
+            sum += CardValues[x[i]]
+        }
+    }
+    if(acecount){
+        val1 = acecount + sum;
+        val2 = (11 + acecount - 1) + sum
+        if(val1 <= 21){
+            possibleVals[0] = val1
+        }
+        if(val2 <= 21){
+            possibleVals[1] = val2
+        }
+    }
+    else{
+        if(sum <= 21){
+            possibleVals[0] = sum
+        }
+    }
+    return possibleVals
+}
+$("#hit").click(function(){
+    var possibleVals = []
+    PlayerCards.unshift(Deck[0])
+    Deck.shift();
+    $("#possibleScores").empty()
+    $("#PlayerCards").append(`<a><img src = ${CardImages[PlayerCards[0]]} width = "75" height = "100"></a>`)
+    possibleVals = computeScore(PlayerCards)
+    if(possibleVals.length == 0){
+        $("#header").append("<h2>Bust, Dealer Wins</h2>")
+        button = document.getElementById("hit")
+        button1 = document.getElementById("stand")
+        button.disabled = true;
+        button1.disabled = true;
+        //alert("Bust, Dealer Wins")
+    }
+    for(var i = 0; i < possibleVals.length;i++){
+        $("#possibleScores").append(`<li>${possibleVals[i]}</li>`)
+    }
+
+    
+})
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+</script>
+</html>
